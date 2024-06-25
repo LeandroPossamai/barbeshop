@@ -3,6 +3,7 @@ import { FaLock } from "react-icons/fa";
 import { DiYeoman } from "react-icons/di";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import Button from "../components/Button";
 
 export function LoginForm() {
   const router = useRouter();
@@ -15,8 +16,8 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-2 flex flex-col">
-      <div className="flex gap-2 items-center ">
+    <form onSubmit={handleSubmit} className="p-4 flex flex-col space-y-4">
+      <div className="flex items-center text-sm text-gray-800 space-x-2">
         <DiYeoman />
         <input
           type="email"
@@ -25,22 +26,25 @@ export function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           placeholder="E-mail"
+          className="flex-1 p-2 border border-gray-300 rounded"
         />
       </div>
-      <div className="flex gap-2 items-center ">
+      <div className="flex items-center text-sm text-gray-800 space-x-2">
         <FaLock />
         <input
           type="password"
           id="password"
           value={password}
-          placeholder="senha"
+          placeholder="Senha"
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="flex-1 p-2 border border-gray-300 rounded"
         />
       </div>
-      <button type="submit" className="">
+      <Button className="custom-class">
         Login
-      </button>
+      </Button>
+    
     </form>
   );
 }
