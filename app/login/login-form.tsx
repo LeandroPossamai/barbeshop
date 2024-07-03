@@ -12,7 +12,12 @@ export function LoginForm() {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    router.push("/");
+    // Simulação de autenticação
+    if (email === "danilo@gmail.com" && password === "1234") {
+      router.push("/barbeiro/agenda");
+    } else {
+      alert("Credenciais inválidas!");
+    }
   }
 
   return (
@@ -41,10 +46,7 @@ export function LoginForm() {
           className="flex-1 p-2 border border-gray-300 rounded"
         />
       </div>
-      <Button className="custom-class">
-        Login
-      </Button>
-    
+      <Button className="custom-class">Login</Button>
     </form>
   );
 }

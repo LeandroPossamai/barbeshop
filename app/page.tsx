@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import Image from "next/image";
@@ -9,6 +9,8 @@ import "slick-carousel/slick/slick-theme.css";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
+import Router from "next/router";
+import router from "next/router";
 
 <style>
   @import
@@ -103,10 +105,8 @@ export default function Home() {
   ];
 
   const handleButtonClick = () => {
-    // Lógica para o botão aqui, se necessário
-    alert("Botão clicado!"); // Exemplo simples de ação ao clicar
+    window.location.href = "/barbeiro/agendamento";
   };
-
   return (
     <>
       {/* Navbar */}
