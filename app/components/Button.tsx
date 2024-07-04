@@ -1,23 +1,22 @@
 // components/Button.tsx
-import React from "react";
+import React, { forwardRef } from 'react'
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  className?: string;
-  children: React.ReactNode;
-}
+import { cn } from '@/utils/cn'
 
-const Button: React.FC<ButtonProps> = ({ className, children, ...props }) => {
+export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {}
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { type = 'button', className, children, ...props },
+  ref
+) {
   return (
     <button
-      type="submit"
-      className={`py-2 px-4 bg-stone-700 text-white rounded hover:bg-neutral-500 ${
-        className || ""
-      }`}
+      ref={ref}
+      type={type}
+      className={cn('py-2 px-4 bg-stone-700 text-white rounded hover:bg-neutral-500', className)}
       {...props}
     >
       {children}
     </button>
-  );
-};
-
-export default Button;
+  )
+})

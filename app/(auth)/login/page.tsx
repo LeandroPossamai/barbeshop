@@ -1,4 +1,8 @@
-import { LoginForm } from "./login-form";
+import { LoginForm } from './login-form'
+
+export const metadata = {
+  title: 'Login'
+}
 
 export default function Login() {
   return (
@@ -7,5 +11,5 @@ export default function Login() {
         <LoginForm />
       </div>
     </div>
-  );
+  )
 }

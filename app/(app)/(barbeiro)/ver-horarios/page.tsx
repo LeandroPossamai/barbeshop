@@ -1,21 +1,23 @@
-"use client";
-import { useEffect, useState } from "react";
-import Button from "../components/Button";
-import { useRouter } from "next/navigation";
+'use client'
+
+import { useEffect, useState } from 'react'
+
+import { Button } from '@/components/Button'
+import { useRouter } from 'next/navigation'
 
 export default function ViewSlots() {
-  const [slots, setSlots] = useState<string[]>([]);
-  const router = useRouter();
+  const [slots, setSlots] = useState<string[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     // Simulação de fetch dos horários do backend/localStorage
-    const savedSlots = JSON.parse(localStorage.getItem("barberSlots") || "[]");
-    setSlots(savedSlots);
-  }, []);
+    const savedSlots = JSON.parse(localStorage.getItem('barberSlots') || '[]')
+    setSlots(savedSlots)
+  }, [])
 
-  const backToAgenda = () => {
-    router.push("/barbeiro/agenda");
-  };
+  function backToAgenda() {
+    router.push('/agenda')
+  }
 
   return (
     <div className="max-w-4xl mx-auto py-8">
@@ -31,9 +33,7 @@ export default function ViewSlots() {
           <li className="p-2">Nenhum horário marcado.</li>
         )}
       </ul>
-      <Button className="custom-class" onClick={backToAgenda}>
-        Voltar à Agenda
-      </Button>
+      <Button onClick={backToAgenda}>Voltar à Agenda</Button>
     </div>
-  );
+  )
 }
