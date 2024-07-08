@@ -1,40 +1,42 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
-import { Button } from '@/components/Button'
-import { useRouter } from 'next/navigation'
+import { Button } from "@/components/Button";
+import { useRouter } from "next/navigation";
 
 export default function BarberAgenda() {
-  const [slots, setSlots] = useState<string[]>([])
-  const [newSlot, setNewSlot] = useState('')
-  const router = useRouter()
+  const [slots, setSlots] = useState<string[]>([]);
+  const [newSlot, setNewSlot] = useState("");
+  const router = useRouter();
 
   function addSlot() {
     if (newSlot && !slots.includes(newSlot)) {
-      setSlots([...slots, newSlot])
-      setNewSlot('')
+      setSlots([...slots, newSlot]);
+      setNewSlot("");
     }
   }
 
   function saveSlots() {
     // Simulação de salvar slots no backend
-    localStorage.setItem('barberSlots', JSON.stringify(slots))
-    alert('Horários salvos com sucesso!')
+    localStorage.setItem("barberSlots", JSON.stringify(slots));
+    alert("Horários salvos com sucesso!");
   }
 
   function viewSlots() {
-    router.push('/ver-horarios')
+    router.push("/ver-horarios");
   }
 
   return (
     <div className="max-w-4xl mx-auto py-8">
-      <h2 className="text-3xl font-bold text-center mb-8">Definir Horários Disponíveis</h2>
+      <h2 className="text-3xl font-bold text-center mb-8">
+        Definir Horários Disponíveis
+      </h2>
       <div className="flex flex-col items-center space-y-4">
         <input
-          type="text"
+          type="datetime-local"
           value={newSlot}
-          onChange={e => setNewSlot(e.target.value)}
+          onChange={(e) => setNewSlot(e.target.value)}
           placeholder="Adicionar novo horário"
           className="p-2 border border-gray-300 rounded"
         />
@@ -50,5 +52,5 @@ export default function BarberAgenda() {
         <Button onClick={viewSlots}>Ver Horários</Button>
       </div>
     </div>
-  )
+  );
 }
