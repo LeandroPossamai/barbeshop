@@ -80,9 +80,26 @@ export default function Agendamento() {
         Escolha seu barbeiro
       </h2>
       <div className="max-w-4xl mx-auto">
-        <Carousel>
+        <Carousel
+          responsive={[
+            {
+              breakpoint: 768,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+              },
+            },
+            {
+              breakpoint: 1000,
+              settings: {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+              },
+            },
+          ]}
+        >
           {barbers.map((barber, index) => (
-            <div key={index} className="flex flex-col items-center p-4">
+            <div key={index} className="flex w-fit flex-col items-center p-4">
               <div
                 className={cn(
                   "relative w-64 h-64 rounded-lg overflow-hidden shadow-lg bg-white cursor-pointer",

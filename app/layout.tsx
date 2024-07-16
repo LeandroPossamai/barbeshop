@@ -1,29 +1,36 @@
-import './globals.css'
+import "./globals.css";
 
-import type { Metadata } from 'next'
-import { Bebas_Neue } from 'next/font/google'
+import type { Metadata } from "next";
+import { Bebas_Neue } from "next/font/google";
+import { Providers } from "./providers";
 
 const bebasNeue = Bebas_Neue({
-  subsets: ['latin'],
-  weight: '400',
-  display: 'swap'
-})
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
-    default: 'Cartacho | Home',
-    template: 'Cartacho | %s'
+    default: "Cartacho | Home",
+    template: "Cartacho | %s",
   },
-  description: 'Conheça a melhor barbearia de Curitiba!',
+  description: "Conheça a melhor barbearia de Curitiba!",
   icons: {
-    icon: '/logo.png'
-  }
-}
+    icon: "/logo.png",
+  },
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className={`${bebasNeue.className}`}>{children}</body>
+      <body className={`${bebasNeue.className}`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
-  )
+  );
 }

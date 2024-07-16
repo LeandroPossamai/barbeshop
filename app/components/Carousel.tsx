@@ -1,6 +1,6 @@
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import Slider from 'react-slick'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 export function Carousel({
   dots = true,
@@ -13,9 +13,9 @@ export function Carousel({
       breakpoint: 768,
       settings: {
         slidesToShow: 1,
-        slidesToScroll: 1
-      }
-    }
+        slidesToScroll: 1,
+      },
+    },
   ],
   ...props
 }: React.ComponentPropsWithoutRef<typeof Slider>) {
@@ -29,5 +29,5 @@ export function Carousel({
       responsive={responsive}
       {...props}
     />
-  )
+  );
 }
