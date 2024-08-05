@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'; // Módulos externos devem ser importados primeiro
-import { type NextRequest } from 'next/server'; // Importação do Next.js depois
-import User from '@/api/models/User'; // Seus módulos locais
-import { connectToDatabase } from '@/api/lib/mongodb.js'
+import { type NextRequest } from 'next/server' // Importação do Next.js depois
+import User from '@/api/models/User' // Seus módulos locais
+import { connectToDatabase } from '@/api/lib/mongodb'
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,8 +29,8 @@ export async function POST(request: NextRequest) {
     await newUser.save();
 
     // Responder com sucesso
-    return new Response(JSON.stringify({ message: 'Usuário criado com sucesso!' }), { status: 201 });
+    return new Response(JSON.stringify({ message: 'Usuário criado com sucesso!' }), { status: 201 })
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Erro ao criar usuário.' }), { status: 500 });
+    return new Response(JSON.stringify({ error }), { status: 500 })
   }
 }
