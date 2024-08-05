@@ -15,17 +15,17 @@ export default function CreateLogin() {
     setIsLoading(true);
     setError('');
     setSuccess('');
-
+  
     try {
-      // Chame a função do back-end para criar o login
       const response = await fetch('/api/create-user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });
-
+  
       if (response.ok) {
         setSuccess('Usuário criado com sucesso!');
+        window.location.href = '/admin'; // Redireciona para a página desejada
       } else {
         const data = await response.json();
         setError(data.error || 'Erro ao criar usuário.');
@@ -36,6 +36,7 @@ export default function CreateLogin() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">

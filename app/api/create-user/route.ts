@@ -1,25 +1,27 @@
-import bcrypt from 'bcryptjs'; // Módulos externos devem ser importados primeiro
-import { type NextRequest } from 'next/server' // Importação do Next.js depois
-import User from '@/api/models/User' // Seus módulos locais
+import bcrypt from 'bcryptjs'
+import { type NextRequest } from 'next/server'
+import User from '@/api/models/User'
 import { connectToDatabase } from '@/api/lib/mongodb'
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("Recebendo dados da requisição...");
     const { name, email, password } = await request.json();
 
-    // Conectar ao banco de dados
+    console.log("Conectando ao banco de dados...");
     await connectToDatabase();
 
-    // Verificar se o usuário já existe
+    console.log("Verificando se o usuário já existe...");
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.log("Usuário já cadastrado.");
       return new Response(JSON.stringify({ error: 'Email já cadastrado.' }), { status: 400 });
     }
 
-    // Criptografar a senha
+    console.log("Criptografando a senha...");
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Criar o novo usuário
+    console.log("Criando novo usuário...");
     const newUser = new User({
       name,
       email,
@@ -27,10 +29,12 @@ export async function POST(request: NextRequest) {
     });
 
     await newUser.save();
+    console.log("Usuário criado com sucesso.");
 
-    // Responder com sucesso
-    return new Response(JSON.stringify({ message: 'Usuário criado com sucesso!' }), { status: 201 })
+    return new Response(null, { status: 303, headers: { Location: '/admin' } });
+
   } catch (error) {
-    return new Response(JSON.stringify({ error }), { status: 500 })
+    console.error("Erro ao processar a solicitação:", error);
+    return new Response(JSON.stringify({ error: error.message || 'Erro ao criar usuário.' }), { status: 500 });
   }
 }
