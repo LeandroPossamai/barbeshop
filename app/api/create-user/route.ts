@@ -1,7 +1,7 @@
-import bcrypt from 'bcryptjs'
-import { type NextRequest } from 'next/server'
-import User from '@/api/models/User'
-import { connectToDatabase } from '@/api/lib/mongodb'
+import bcrypt from 'bcryptjs';
+import { type NextRequest } from 'next/server';
+import User from '@/api/models/User';
+import { connectToDatabase } from '@/api/lib/mongodb';
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,19 +18,17 @@ export async function POST(request: NextRequest) {
       return new Response(JSON.stringify({ error: 'Email já cadastrado.' }), { status: 400 });
     }
 
-    console.log("Criptografando a senha...");
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    console.log("Criando novo usuário...");
+    // Criação de um novo usuário
     const newUser = new User({
       name,
       email,
-      password: hashedPassword,
+      password, // Isso vai passar pelo hook "pre-save" que criptografa a senha
     });
 
     await newUser.save();
     console.log("Usuário criado com sucesso.");
 
+    // Redirecionar para a página de admin após o sucesso
     return new Response(null, { status: 303, headers: { Location: '/admin' } });
 
   } catch (error) {

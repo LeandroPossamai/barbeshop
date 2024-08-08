@@ -5,9 +5,8 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { Button } from "@/components/Button";
 import { FaLock } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-import { useUser } from "@/providers/user-provider";
 import { GiMustache } from "react-icons/gi";
+import { useUser } from "@/providers/user-provider";
 
 // Schema de validação com Yup
 const validationSchema = Yup.object().shape({
@@ -32,10 +31,10 @@ export function LoginForm() {
     try {
       await login(values.email, values.password);
     } catch (error: any) {
-      setError(error.message);
+      setError(error.message || "Erro ao fazer login");
+    } finally {
+      setSubmitting(false);
     }
-
-    setSubmitting(false);
   }
 
   return (

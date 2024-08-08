@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+// Definição do esquema do usuário
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -9,6 +10,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,  // Adiciona a restrição de unicidade ao email
   },
   number: {
     type: String,
@@ -21,12 +23,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  createadAt: {
+  createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now, // Correção: Passar Date.now como uma função
   },
 });
 
+// Middleware para hash da senha antes de salvar o usuário
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
@@ -35,4 +38,5 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
+// Exporta o modelo do usuário
 export default mongoose.models.User || mongoose.model("User", UserSchema);

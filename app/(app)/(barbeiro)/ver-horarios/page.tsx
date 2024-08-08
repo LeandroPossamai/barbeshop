@@ -9,7 +9,7 @@ type Appointment = {
   time: string;
   name: string;
   email: string;
-  phone: string; // Adicionando o campo de telefone
+  phone: string;
 };
 
 export default function ViewSlots() {
@@ -17,11 +17,30 @@ export default function ViewSlots() {
   const router = useRouter();
 
   useEffect(() => {
-    // Simulação de fetch dos agendamentos do backend/localStorage
-    const savedAppointments = JSON.parse(
-      localStorage.getItem("appointments") || "[]"
-    ) as Appointment[];
-    setAppointments(savedAppointments);
+    async function fetchAppointments() {
+      try {
+        const response = await fetch(`/api/schedules?barberId=ID_DO_BARBEIRO`);
+        if (!response.ok) {
+          throw new Error('Erro ao buscar horários');
+        }
+        const data = await response.json();
+
+        // Transforme os dados recebidos em appointments se necessário
+        const formattedAppointments = data.map((slot: any) => ({
+          barber: slot.barberId, // Ajuste conforme necessário
+          time: slot.date,
+          name: slot.clientName || "N/A", // Adapte conforme a estrutura dos dados
+          email: slot.clientEmail || "N/A", // Adapte conforme a estrutura dos dados
+          phone: slot.clientPhone || "N/A", // Adapte conforme a estrutura dos dados
+        }));
+
+        setAppointments(formattedAppointments);
+      } catch (error) {
+        console.error("Erro ao buscar os horários:", error);
+      }
+    }
+
+    fetchAppointments();
   }, []);
 
   function backToAgenda() {
@@ -47,19 +66,19 @@ export default function ViewSlots() {
           appointments.map((appointment, index) => (
             <li key={index} className="p-2 border-b border-gray-300">
               <p>
-                <strong></strong> {appointment.barber}
+                <strong>Barbeiro:</strong> {appointment.barber}
               </p>
               <p>
-                <strong></strong> {formatDateTime(appointment.time)}
+                <strong>Horário:</strong> {formatDateTime(appointment.time)}
               </p>
               <p>
-                <strong></strong> {appointment.name}
+                <strong>Cliente:</strong> {appointment.name}
               </p>
               <p>
-                <strong></strong> {appointment.email}
+                <strong>Email:</strong> {appointment.email}
               </p>
               <p>
-                <strong></strong> {appointment.phone}
+                <strong>Telefone:</strong> {appointment.phone}
               </p>
             </li>
           ))

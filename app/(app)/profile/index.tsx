@@ -14,7 +14,7 @@ export function Profile() {
 function BarberForm() {
   return (
     <form>
-      <label>caramba, que pinto enorme!!</label>
+      <label></label>
     </form>
   );
 }
@@ -22,7 +22,7 @@ function BarberForm() {
 function BarberShopForm() {
   return (
     <form>
-      <label>Dr. Nefario, tire minha calcinha!!</label>
+      <label></label>
     </form>
   );
 }
