@@ -9,9 +9,14 @@ export async function GET(req: NextRequest) {
   const dateStr = searchParams.get('date');
 
   try {
+    // Verifique se barberId ou dateStr são nulos
+    if (!barberId || !dateStr) {
+      return new Response(JSON.stringify({ error: 'BarberId e date são obrigatórios.' }), { status: 400 });
+    }
+
     await connectToDatabase();
 
-    // Verifica se a data fornecida é válida
+    // Converte a string da data para um objeto Date
     const dateObj = new Date(dateStr);
     if (isNaN(dateObj.getTime())) {
       return new Response(JSON.stringify({ error: 'Data inválida.' }), { status: 400 });
@@ -41,6 +46,7 @@ export async function GET(req: NextRequest) {
 
     return new Response(JSON.stringify(schedule.times), { status: 200 });
   } catch (error) {
+    console.error('Erro:', error);
     return new Response(JSON.stringify({ error: 'Erro ao buscar horários.' }), { status: 500 });
   }
 }
