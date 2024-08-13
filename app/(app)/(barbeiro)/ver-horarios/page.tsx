@@ -19,29 +19,20 @@ export default function ViewSlots() {
   useEffect(() => {
     async function fetchAppointments() {
       try {
-        const response = await fetch(`/api/schedules?barberId=ID_DO_BARBEIRO`);
+        const response = await fetch(`/api/horario-disponivel?barberId=66bba5acddac395fde5fac32`);
         if (!response.ok) {
           throw new Error('Erro ao buscar horários');
         }
         const data = await response.json();
-
-        // Transforme os dados recebidos em appointments se necessário
-        const formattedAppointments = data.map((slot: any) => ({
-          barber: slot.barberId, // Ajuste conforme necessário
-          time: slot.date,
-          name: slot.clientName || "N/A", // Adapte conforme a estrutura dos dados
-          email: slot.clientEmail || "N/A", // Adapte conforme a estrutura dos dados
-          phone: slot.clientPhone || "N/A", // Adapte conforme a estrutura dos dados
-        }));
-
-        setAppointments(formattedAppointments);
+        console.log(data); // Verifique se os dados estão corretos
       } catch (error) {
-        console.error("Erro ao buscar os horários:", error);
+        console.error(error);
       }
     }
-
+  
     fetchAppointments();
   }, []);
+  
 
   function backToAgenda() {
     router.push("/agenda");
