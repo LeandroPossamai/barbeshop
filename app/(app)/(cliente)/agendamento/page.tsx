@@ -8,44 +8,67 @@ import Image from "next/image";
 import { Button } from "@/components/Button";
 
 type Appointment = {
-  barber: string;
   time: string;
-  name: string;
-  email: string;
+  isBooked: boolean;
+  _id: string;
 };
 
 export default function Agendamento() {
-  const [selectedBarber, setSelectedBarber] = useState("");
-  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
-  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedBarber, setSelectedBarber] = useState<string>("");
+  const [availableSlots, setAvailableSlots] = useState<Appointment[]>([]);
+  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch available slots from localStorage
-    const savedSlots = JSON.parse(localStorage.getItem("barberSlots") || "[]");
-    setAvailableSlots(savedSlots);
-  }, []);
+    if (selectedBarber) {
+      fetchAvailableSlots(selectedBarber);
+    }
+  }, [selectedBarber]);
+
+  async function fetchAvailableSlots(barberId: string) {
+    setLoading(true);
+    setError(null);
+    try {
+      const date = new Date().toISOString().split('T')[0]; // Data no formato yyyy-mm-dd
+      const response = await fetch(`/api/horario-disponivel?barberId=${barberId}&date=${date}`);
+      if (!response.ok) {
+        throw new Error('Erro ao buscar horários disponíveis');
+      }
+      const data: Appointment[] = await response.json();
+      setAvailableSlots(data);
+    } catch (error) {
+      console.error('Erro ao buscar horários disponíveis:', error);
+      setError('Erro ao buscar horários disponíveis');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const barbers = [
     {
       name: "Danilo",
       image: "/danilo.jpeg",
       description: "10 anos de experiência em cortes clássicos.",
+      id: "66bba5acddac395fde5fac32",
     },
     {
       name: "Lucas",
       image: "/lucas.jpeg",
       description: "Especialista em cortes modernos para homens.",
+      id: "66b5218003af228c62a1f41d",
     },
     {
       name: "Erik",
       image: "/erik.jpeg",
       description: "Barbeiro especializado em cuidados de barba.",
+      id: "66bba5acddac395fde5fac3",
     },
   ];
 
-  function handleBarberSelect(barberName: string) {
-    setSelectedBarber(barberName === selectedBarber ? "" : barberName);
+  function handleBarberSelect(barberId: string) {
+    setSelectedBarber(barberId === selectedBarber ? "" : barberId);
     setSelectedTime("");
   }
 
@@ -98,14 +121,14 @@ export default function Agendamento() {
             },
           ]}
         >
-          {barbers.map((barber, index) => (
-            <div key={index} className="flex w-fit flex-col items-center p-4">
+          {barbers.map((barber) => (
+            <div key={barber.id} className="flex w-fit flex-col items-center p-4">
               <div
                 className={cn(
                   "relative w-64 h-64 rounded-lg overflow-hidden shadow-lg bg-white cursor-pointer",
-                  selectedBarber === barber.name && "border-4 border-blue-500"
+                  selectedBarber === barber.id && "border-4 border-blue-500"
                 )}
-                onClick={() => handleBarberSelect(barber.name)}
+                onClick={() => handleBarberSelect(barber.id)}
               >
                 <Image
                   src={barber.image}
@@ -127,21 +150,28 @@ export default function Agendamento() {
           <h3 className="text-2xl font-bold text-center mb-4">
             Selecione um horário
           </h3>
+          {loading && <p className="text-center text-gray-500">Carregando...</p>}
+          {error && <p className="text-center text-red-500">{error}</p>}
           <div className="flex flex-wrap justify-center space-y-2">
-            {availableSlots.map((slot, index) => (
-              <button
-                key={index}
-                className={cn(
-                  "p-2 border rounded-lg w-20 text-sm",
-                  selectedTime === slot
-                    ? "bg-blue-500 text-white" // Estilo para botão selecionado
-                    : "bg-white text-gray-700" // Estilo para botão não selecionado
-                )}
-                onClick={() => handleTimeSelect(slot)}
-              >
-                {formatDateTime(slot)}
-              </button>
-            ))}
+            {availableSlots.length > 0 ? (
+              availableSlots.map((slot) => (
+                <button
+                  key={slot._id}
+                  className={cn(
+                    "p-2 border rounded-lg w-20 text-sm",
+                    selectedTime === slot.time
+                      ? "bg-blue-500 text-white" // Estilo para botão selecionado
+                      : "bg-white text-gray-700" // Estilo para botão não selecionado
+                  )}
+                  onClick={() => handleTimeSelect(slot.time)}
+                  disabled={slot.isBooked} // Desabilita botão se o horário estiver reservado
+                >
+                  {formatDateTime(slot.time)}
+                </button>
+              ))
+            ) : (
+              <p className="text-center text-gray-500">Nenhum horário disponível</p>
+            )}
           </div>
           <div className="text-center mt-4">
             <Button onClick={handleConfirm} disabled={!selectedTime}>
