@@ -1,15 +1,11 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
 
 type Appointment = {
-  barber: string;
   time: string;
-  name: string;
-  email: string;
-  phone: string;
+  isBooked: boolean;
 };
 
 export default function ViewSlots() {
@@ -19,12 +15,19 @@ export default function ViewSlots() {
   useEffect(() => {
     async function fetchAppointments() {
       try {
-        const response = await fetch(`/api/horario-disponivel?barberId=66bba5acddac395fde5fac32`);
+        const barberId = "66bba5acddac395fde5fac32"; // Substitua pelo ID correto
+        const date = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
+        const response = await fetch(`/api/horario-disponivel?barberId=${barberId}&date=${date}`);
+
+        console.log('Response status:', response.status);
+
         if (!response.ok) {
           throw new Error('Erro ao buscar horários');
         }
+
         const data = await response.json();
-        console.log(data); // Verifique se os dados estão corretos
+        console.log('Data received:', data); // Verifique os dados recebidos
+        setAppointments(data); // Atualiza o estado com os dados retornados
       } catch (error) {
         console.error(error);
       }
@@ -32,21 +35,25 @@ export default function ViewSlots() {
   
     fetchAppointments();
   }, []);
-  
 
   function backToAgenda() {
     router.push("/agenda");
   }
 
   function formatDateTime(dateTime: string) {
-    const dateObj = new Date(dateTime);
-    const formattedDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}/${String(
-      dateObj.getFullYear()
-    ).slice(2)}`;
-    const formattedTime = `${dateObj.getHours()}:${String(
-      dateObj.getMinutes()
-    ).padStart(2, "0")}`;
-    return `${formattedDate} ${formattedTime}`;
+    try {
+      const dateObj = new Date(dateTime);
+      const formattedDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}/${String(
+        dateObj.getFullYear()
+      ).slice(2)}`;
+      const formattedTime = `${dateObj.getHours()}:${String(
+        dateObj.getMinutes()
+      ).padStart(2, "0")}`;
+      return `${formattedDate} ${formattedTime}`;
+    } catch (error) {
+      console.error('Erro ao formatar data/hora:', error);
+      return dateTime; // Retorna o valor original se ocorrer erro
+    }
   }
 
   return (
@@ -57,19 +64,10 @@ export default function ViewSlots() {
           appointments.map((appointment, index) => (
             <li key={index} className="p-2 border-b border-gray-300">
               <p>
-                <strong>Barbeiro:</strong> {appointment.barber}
-              </p>
-              <p>
                 <strong>Horário:</strong> {formatDateTime(appointment.time)}
               </p>
               <p>
-                <strong>Cliente:</strong> {appointment.name}
-              </p>
-              <p>
-                <strong>Email:</strong> {appointment.email}
-              </p>
-              <p>
-                <strong>Telefone:</strong> {appointment.phone}
+                <strong>Status:</strong> {appointment.isBooked ? 'Reservado' : 'Disponível'}
               </p>
             </li>
           ))
