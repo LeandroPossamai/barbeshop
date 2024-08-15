@@ -33,10 +33,17 @@ export default function Agendamento() {
     try {
       const date = new Date().toISOString().split('T')[0]; // Data no formato yyyy-mm-dd
       const response = await fetch(`/api/horario-disponivel?barberId=${barberId}&date=${date}`);
+      
+      // Log do status da resposta e dados recebidos
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
         throw new Error('Erro ao buscar horários disponíveis');
       }
+
       const data: Appointment[] = await response.json();
+      console.log('Data received:', data); // Verifique os dados recebidos
+
       setAvailableSlots(data);
     } catch (error) {
       console.error('Erro ao buscar horários disponíveis:', error);
@@ -84,17 +91,6 @@ export default function Agendamento() {
       }).toString();
       router.push(`/pre-cadastro?${queryParams}`);
     }
-  }
-
-  function formatDateTime(dateTime: string) {
-    const dateObj = new Date(dateTime);
-    const formattedDate = `${String(dateObj.getDate()).padStart(2, "0")}/${String(
-      dateObj.getMonth() + 1
-    ).padStart(2, "0")}/${String(dateObj.getFullYear()).slice(2)}`;
-    const formattedTime = `${String(dateObj.getHours()).padStart(2, "0")}:${String(
-      dateObj.getMinutes()
-    ).padStart(2, "0")}`;
-    return `${formattedDate} ${formattedTime}`;
   }
 
   return (
@@ -166,7 +162,8 @@ export default function Agendamento() {
                   onClick={() => handleTimeSelect(slot.time)}
                   disabled={slot.isBooked} // Desabilita botão se o horário estiver reservado
                 >
-                  {formatDateTime(slot.time)}
+                  {/* Exibindo o horário diretamente sem formatação */}
+                  {slot.time}
                 </button>
               ))
             ) : (
