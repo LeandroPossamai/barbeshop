@@ -1,10 +1,11 @@
 "use client";
+import { useUser } from "@/providers/user-provider";
 import { useState } from "react";
 
 export default function SaveSlots() {
   const [slots, setSlots] = useState<string[]>([]);
   const [newSlot, setNewSlot] = useState<string>("");
-  const [barberId, setBarberId] = useState<string>("66bba5acddac395fde5fac32"); // Coloque aqui o ID do barbeiro
+  const { user } = useUser();
 
   const handleAddSlot = () => {
     if (newSlot) {
@@ -14,9 +15,10 @@ export default function SaveSlots() {
   };
 
   const handleSaveSlots = async () => {
-    const date = slots.length > 0 ? new Date(slots[0]).toISOString().split('T')[0] : "";
+    const date =
+      slots.length > 0 ? new Date(slots[0]).toISOString().split("T")[0] : "";
 
-    if (!barberId || !date || slots.length === 0) {
+    if (!user?._id || !date || slots.length === 0) {
       console.error("ID do barbeiro, data ou horários não definidos.");
       return;
     }
@@ -28,9 +30,15 @@ export default function SaveSlots() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          barberId,
+          barberId: user._id,
           date,
-          times: slots.map((slot) => ({ time: new Date(slot).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), isBooked: false }))
+          times: slots.map((slot) => ({
+            time: new Date(slot).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            isBooked: false,
+          })),
         }),
       });
 

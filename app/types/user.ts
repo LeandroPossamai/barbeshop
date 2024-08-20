@@ -1,18 +1,7 @@
-type BaseUser = {
-  id: string;
+export type User = {
+  _id: string;
   name: string;
   email: string;
+  role: "Barber" | "BarberShop";
+  createdAt: string;
 };
-
-type Barber = BaseUser & {
-  schedule: any;
-  schedules: any[];
-  role: "Barber";
-};
-
-type BarberShop = BaseUser & {
-  barbers: Barber[];
-  role: "Barber Shop";
-};
-
-export type User = Barber | BarberShop;

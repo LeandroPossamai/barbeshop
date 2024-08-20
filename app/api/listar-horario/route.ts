@@ -1,6 +1,6 @@
-import { NextRequest } from 'next/server';
-import Schedule from '@/api/models/Schedule';
-import { connectToDatabase } from '@/api/lib/mongodb';
+import { NextRequest } from "next/server";
+import Schedule from "@/api/models/Schedule";
+import { connectToDatabase } from "@/api/lib/mongodb";
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,6 +18,9 @@ export async function POST(req: NextRequest) {
 
     return new Response(JSON.stringify({ success: true }), { status: 201 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message || 'Erro ao salvar horários.' }), { status: 500 });
+    return new Response(
+      JSON.stringify({ error: error.message || "Erro ao salvar horários." }),
+      { status: 500 }
+    );
   }
 }

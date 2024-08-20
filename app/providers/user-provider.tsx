@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation"; // Importar o hook de roteamento
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@/types/user";
 
 interface UserContextProps {
@@ -13,6 +13,23 @@ export const UserContext = createContext({} as UserContextProps);
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User>();
   const router = useRouter(); // Hook de roteamento
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    fetch("/api/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(async (res) => {
+      if (!res.ok) {
+        return;
+      }
+      const user = await res.json();
+      setUser(user);
+    });
+  }, []);
+  console.log(user);
 
   async function login(email: string, password: string) {
     try {
