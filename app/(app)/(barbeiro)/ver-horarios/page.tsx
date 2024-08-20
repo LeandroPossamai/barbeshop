@@ -15,12 +15,20 @@ export default function ViewSlots() {
   useEffect(() => {
     async function fetchAppointments() {
       try {
-        const barberId = "66bba5acddac395fde5fac32"; // Substitua pelo ID correto
+        // Primeiro, obtenha o ID do barbeiro logado
+        const userResponse = await fetch('/api/auth/me'); // Substitua pela rota correta
+        if (!userResponse.ok) {
+          throw new Error('Erro ao obter usuário logado');
+        }
+
+        const userData = await userResponse.json();
+        const barberId = userData._id; // Pegue o ID do barbeiro logado
+
+        // Agora, obtenha os horários disponíveis para esse barbeiro
         const date = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
         const response = await fetch(`/api/horario-disponivel?barberId=${barberId}&date=${date}`);
 
-        // Adicione o log do status da resposta aqui
-        console.log('Response status:', response.status);
+        console.log('Response status:', response.status); // Log do status da resposta
 
         if (!response.ok) {
           throw new Error('Erro ao buscar horários');
@@ -33,12 +41,11 @@ export default function ViewSlots() {
         console.error(error);
       }
     }
-  
+
     fetchAppointments();
   }, []);
 
-  // Log para verificar o estado dos appointments
-  console.log('Estado appointments:', appointments);
+  console.log('Estado appointments:', appointments); // Log para verificar o estado dos appointments
 
   function backToAgenda() {
     router.push("/agenda");
@@ -63,8 +70,7 @@ export default function ViewSlots() {
           appointments.map((appointment, index) => (
             <li key={index} className="p-2 border-b border-gray-300">
               <p>
-                <strong>Horário:</strong> {/* Exibindo horário sem formatar para depuração */}
-                {appointment.time}
+                <strong>Horário:</strong> {appointment.time} {/* Exibindo horário sem formatar para depuração */}
               </p>
               <p>
                 <strong>Status:</strong> {appointment.isBooked ? 'Reservado' : 'Disponível'}
