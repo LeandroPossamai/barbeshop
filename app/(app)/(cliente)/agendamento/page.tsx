@@ -64,13 +64,13 @@ export default function Agendamento() {
       name: "Lucas",
       image: "/lucas.jpeg",
       description: "Especialista em cortes modernos para homens.",
-      id: "66b5218003af228c62a1f41d",
+      id: "66bba5acddac395fde5fac32",
     },
     {
       name: "Erik",
       image: "/erik.jpeg",
       description: "Barbeiro especializado em cuidados de barba.",
-      id: "66bba5acddac395fde5fac3",
+      id: "66be2b08c411ad4269f08ed9",
     },
   ];
 

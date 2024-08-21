@@ -1,11 +1,12 @@
 "use client";
 import { useUser } from "@/providers/user-provider";
 import { useState } from "react";
+import { Button } from "@/components/Button"; // Importe o componente Button
 
 export default function SaveSlots() {
   const [slots, setSlots] = useState<string[]>([]);
   const [newSlot, setNewSlot] = useState<string>("");
-  const { user } = useUser();
+  const { user, logout } = useUser(); // Supondo que você tenha a função logout no seu user-provider
 
   const handleAddSlot = () => {
     if (newSlot) {
@@ -53,6 +54,16 @@ export default function SaveSlots() {
     }
   };
 
+  // Função para logout
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/logout", { method: "POST" });
+      logout(); // Chama a função de logout do user-provider
+    } catch (error) {
+      console.error("Erro ao realizar logout:", error);
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
       <div className="w-full max-w-md bg-white p-4 rounded-md shadow-lg">
@@ -66,12 +77,9 @@ export default function SaveSlots() {
             onChange={(e) => setNewSlot(e.target.value)}
             className="flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button
-            onClick={handleAddSlot}
-            className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
-          >
+          <Button onClick={handleAddSlot}>
             Adicionar
-          </button>
+          </Button>
         </div>
 
         <ul className="space-y-2 mb-4">
@@ -85,12 +93,14 @@ export default function SaveSlots() {
           ))}
         </ul>
 
-        <button
-          onClick={handleSaveSlots}
-          className="w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 transition"
-        >
+        <Button onClick={handleSaveSlots} className="w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 transition">
           Salvar Horários
-        </button>
+        </Button>
+        
+        {/* Botão de logout */}
+        <Button onClick={handleLogout} className="mt-4 w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 transition">
+          Logout
+        </Button>
       </div>
     </div>
   );

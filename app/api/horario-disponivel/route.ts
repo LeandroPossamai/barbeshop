@@ -29,8 +29,8 @@ export async function GET(req: NextRequest) {
     console.log('Data de início do dia:', startOfDay.toISOString());
     console.log('Data de fim do dia:', endOfDay.toISOString());
 
-    // Busca por agendamentos onde a data está dentro do intervalo do dia
-    const schedule = await Schedule.findOne({
+    // Busca por todos os agendamentos onde a data está dentro do intervalo do dia
+    const schedules = await Schedule.find({
       barberId: new mongoose.Types.ObjectId(barberId),
       date: {
         $gte: startOfDay,
@@ -38,13 +38,18 @@ export async function GET(req: NextRequest) {
       },
     }).exec();
 
-    console.log('Resultado da consulta:', schedule);
+    console.log('Resultado da consulta:', schedules);
 
-    if (!schedule) {
+    if (schedules.length === 0) {
       return new Response(JSON.stringify({ times: [] }), { status: 200 });
     }
 
-    return new Response(JSON.stringify(schedule.times), { status: 200 });
+    // Combina todos os horários de todos os documentos encontrados
+    const combinedTimes = schedules.reduce((acc, schedule) => {
+      return acc.concat(schedule.times);
+    }, []);
+
+    return new Response(JSON.stringify(combinedTimes), { status: 200 });
   } catch (error) {
     console.error('Erro:', error);
     return new Response(JSON.stringify({ error: 'Erro ao buscar horários.' }), { status: 500 });
