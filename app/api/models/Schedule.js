@@ -1,27 +1,27 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const ScheduleSchema = new mongoose.Schema({
   barberId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Referência ao modelo de usuário (barbeiro)
-    required: true,
+    required: true
   },
   date: {
     type: Date,
-    required: true,
+    required: true
   },
   times: [
     {
       time: {
         type: String,
-        required: true,
+        required: true
       },
       isBooked: {
         type: Boolean,
-        default: false,
-      },
-    },
-  ],
-});
+        default: false
+      }
+    }
+  ]
+})
 
-export default mongoose.models.Schedule || mongoose.model('Schedule', ScheduleSchema);
+export default mongoose.models.Schedule || mongoose.model('Schedule', ScheduleSchema)

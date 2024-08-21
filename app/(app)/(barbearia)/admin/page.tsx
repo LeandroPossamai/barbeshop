@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -52,8 +52,12 @@ export default function Home() {
             <button className="bg-blue-500 text-white px-4 py-2 rounded mb-4">Adicionar Funcionário</button>
           </Link>
           <ul>
-            <li className="mb-2">Carlos - <span className="text-sm text-gray-600">Editar | Remover</span></li>
-            <li className="mb-2">Pedro - <span className="text-sm text-gray-600">Editar | Remover</span></li>
+            <li className="mb-2">
+              Carlos - <span className="text-sm text-gray-600">Editar | Remover</span>
+            </li>
+            <li className="mb-2">
+              Pedro - <span className="text-sm text-gray-600">Editar | Remover</span>
+            </li>
             {/* Mais funcionários */}
           </ul>
         </section>
@@ -64,8 +68,12 @@ export default function Home() {
             <button className="bg-blue-500 text-white px-4 py-2 rounded mb-4">Adicionar Serviço</button>
           </Link>
           <ul>
-            <li className="mb-2">Corte de Cabelo - <span className="text-sm text-gray-600">Editar | Remover</span></li>
-            <li className="mb-2">Barba - <span className="text-sm text-gray-600">Editar | Remover</span></li>
+            <li className="mb-2">
+              Corte de Cabelo - <span className="text-sm text-gray-600">Editar | Remover</span>
+            </li>
+            <li className="mb-2">
+              Barba - <span className="text-sm text-gray-600">Editar | Remover</span>
+            </li>
             {/* Mais serviços */}
           </ul>
         </section>
@@ -78,5 +86,5 @@ export default function Home() {
         </div>
       </footer>
     </div>
-  );
+  )
 }

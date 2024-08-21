@@ -1,42 +1,41 @@
-"use client";
+'use client'
 
-import { useState } from 'react';
+import { useState } from 'react'
 
 export default function CreateLogin() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-    setSuccess('');
-  
+  const handleSubmit = async e => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
+    setSuccess('')
+
     try {
       const response = await fetch('/api/create-user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
-      });
-  
+        body: JSON.stringify({ name, email, password })
+      })
+
       if (response.ok) {
-        setSuccess('Usuário criado com sucesso!');
-        window.location.href = '/admin'; // Redireciona para a página desejada
+        setSuccess('Usuário criado com sucesso!')
+        window.location.href = '/admin' // Redireciona para a página desejada
       } else {
-        const data = await response.json();
-        setError(data.error || 'Erro ao criar usuário.');
+        const data = await response.json()
+        setError(data.error || 'Erro ao criar usuário.')
       }
     } catch (error) {
-      setError(error.message || 'Erro ao criar usuário.');
+      setError(error.message || 'Erro ao criar usuário.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
-  
+  }
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -96,5 +95,5 @@ export default function CreateLogin() {
         </form>
       </div>
     </div>
-  );
+  )
 }

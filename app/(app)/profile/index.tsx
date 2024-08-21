@@ -1,14 +1,14 @@
-"use client";
+'use client'
 
-import { useUser } from "@/providers/user-provider";
-import { redirect } from "next/navigation";
+import { useUser } from '@/providers/user-provider'
+import { redirect } from 'next/navigation'
 
 export function Profile() {
-  const { user } = useUser();
+  const { user } = useUser()
 
-  if (user?.role === "Barber Shop") return <BarberShopForm />;
-  if (user?.role === "Barber") return <BarberForm />;
-  else redirect("/");
+  if (user?.role === 'Barber Shop') return <BarberShopForm />
+  if (user?.role === 'Barber') return <BarberForm />
+  else redirect('/')
 }
 
 function BarberForm() {
@@ -16,7 +16,7 @@ function BarberForm() {
     <form>
       <label></label>
     </form>
-  );
+  )
 }
 
 function BarberShopForm() {
@@ -24,5 +24,5 @@ function BarberShopForm() {
     <form>
       <label></label>
     </form>
-  );
+  )
 }

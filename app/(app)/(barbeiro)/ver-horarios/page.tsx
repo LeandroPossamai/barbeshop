@@ -1,65 +1,62 @@
-"use client";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/Button";
-import { useRouter } from "next/navigation";
+'use client'
+import { useEffect, useState } from 'react'
+
+import { Button } from '@/components/Button'
+import { useRouter } from 'next/navigation'
 
 type Appointment = {
-  time: string;
-  isBooked: boolean;
-};
+  time: string
+  isBooked: boolean
+}
 
 export default function ViewSlots() {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const router = useRouter();
+  const [appointments, setAppointments] = useState<Appointment[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchAppointments() {
       try {
         // Primeiro, obtenha o ID do barbeiro logado
-        const userResponse = await fetch('/api/auth/me'); // Substitua pela rota correta
+        const userResponse = await fetch('/api/auth/me') // Substitua pela rota correta
         if (!userResponse.ok) {
-          throw new Error('Erro ao obter usuário logado');
+          throw new Error('Erro ao obter usuário logado')
         }
 
-        const userData = await userResponse.json();
-        const barberId = userData._id; // Pegue o ID do barbeiro logado
+        const userData = await userResponse.json()
+        const barberId = userData._id // Pegue o ID do barbeiro logado
 
         // Agora, obtenha os horários disponíveis para esse barbeiro
-        const date = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
-        const response = await fetch(`/api/horario-disponivel?barberId=${barberId}&date=${date}`);
+        const date = new Date().toISOString().split('T')[0] // Data atual no formato YYYY-MM-DD
+        const response = await fetch(`/api/horario-disponivel?barberId=${barberId}&date=${date}`)
 
-        console.log('Response status:', response.status); // Log do status da resposta
+        console.log('Response status:', response.status) // Log do status da resposta
 
         if (!response.ok) {
-          throw new Error('Erro ao buscar horários');
+          throw new Error('Erro ao buscar horários')
         }
 
-        const data = await response.json();
-        console.log('Data received:', data); // Verifique os dados recebidos
-        setAppointments(data); // Atualiza o estado com os dados retornados
+        const data = await response.json()
+        console.log('Data received:', data) // Verifique os dados recebidos
+        setAppointments(data) // Atualiza o estado com os dados retornados
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     }
 
-    fetchAppointments();
-  }, []);
+    fetchAppointments()
+  }, [])
 
-  console.log('Estado appointments:', appointments); // Log para verificar o estado dos appointments
+  console.log('Estado appointments:', appointments) // Log para verificar o estado dos appointments
 
   function backToAgenda() {
-    router.push("/agenda");
+    router.push('/agenda')
   }
 
   function formatDateTime(dateTime: string) {
-    const dateObj = new Date(dateTime);
-    const formattedDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}/${String(
-      dateObj.getFullYear()
-    ).slice(2)}`;
-    const formattedTime = `${dateObj.getHours()}:${String(
-      dateObj.getMinutes()
-    ).padStart(2, "0")}`;
-    return `${formattedDate} ${formattedTime}`;
+    const dateObj = new Date(dateTime)
+    const formattedDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}/${String(dateObj.getFullYear()).slice(2)}`
+    const formattedTime = `${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2, '0')}`
+    return `${formattedDate} ${formattedTime}`
   }
 
   return (
@@ -83,5 +80,5 @@ export default function ViewSlots() {
       </ul>
       <Button onClick={backToAgenda}>Voltar à Agenda</Button>
     </div>
-  );
+  )
 }

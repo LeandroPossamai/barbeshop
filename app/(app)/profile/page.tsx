@@ -1,9 +1,9 @@
-import { Profile } from ".";
+import { Profile } from '.'
 
 export const metadata = {
-  title: "Meus Dados",
-};
+  title: 'Meus Dados'
+}
 
 export function Page() {
-  return <Profile />;
+  return <Profile />
 }

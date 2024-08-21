@@ -1,103 +1,102 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Carousel } from "@/components/Carousel";
-import { cn } from "@/utils/cn";
-import Image from "next/image";
-import { Button } from "@/components/Button";
+import { useEffect, useState } from 'react'
+
+import { Button } from '@/components/Button'
+import { Carousel } from '@/components/Carousel'
+import { cn } from '@/utils/cn'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 type Appointment = {
-  time: string;
-  isBooked: boolean;
-  _id: string;
-};
+  time: string
+  isBooked: boolean
+  _id: string
+}
 
 export default function Agendamento() {
-  const [selectedBarber, setSelectedBarber] = useState<string>("");
-  const [availableSlots, setAvailableSlots] = useState<Appointment[]>([]);
-  const [selectedTime, setSelectedTime] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const [selectedBarber, setSelectedBarber] = useState<string>('')
+  const [availableSlots, setAvailableSlots] = useState<Appointment[]>([])
+  const [selectedTime, setSelectedTime] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     if (selectedBarber) {
-      fetchAvailableSlots(selectedBarber);
+      fetchAvailableSlots(selectedBarber)
     }
-  }, [selectedBarber]);
+  }, [selectedBarber])
 
   async function fetchAvailableSlots(barberId: string) {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
     try {
-      const date = new Date().toISOString().split('T')[0]; // Data no formato yyyy-mm-dd
-      const response = await fetch(`/api/horario-disponivel?barberId=${barberId}&date=${date}`);
-      
+      const date = new Date().toISOString().split('T')[0] // Data no formato yyyy-mm-dd
+      const response = await fetch(`/api/horario-disponivel?barberId=${barberId}&date=${date}`)
+
       // Log do status da resposta e dados recebidos
-      console.log('Response status:', response.status);
+      console.log('Response status:', response.status)
 
       if (!response.ok) {
-        throw new Error('Erro ao buscar horários disponíveis');
+        throw new Error('Erro ao buscar horários disponíveis')
       }
 
-      const data: Appointment[] = await response.json();
-      console.log('Data received:', data); // Verifique os dados recebidos
+      const data: Appointment[] = await response.json()
+      console.log('Data received:', data) // Verifique os dados recebidos
 
-      setAvailableSlots(data);
+      setAvailableSlots(data)
     } catch (error) {
-      console.error('Erro ao buscar horários disponíveis:', error);
-      setError('Erro ao buscar horários disponíveis');
+      console.error('Erro ao buscar horários disponíveis:', error)
+      setError('Erro ao buscar horários disponíveis')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   const barbers = [
     {
-      name: "Danilo",
-      image: "/danilo.jpeg",
-      description: "10 anos de experiência em cortes clássicos.",
-      id: "66bba5acddac395fde5fac32",
+      name: 'Danilo',
+      image: '/danilo.jpeg',
+      description: '10 anos de experiência em cortes clássicos.',
+      id: '66bba5acddac395fde5fac32'
     },
     {
-      name: "Lucas",
-      image: "/lucas.jpeg",
-      description: "Especialista em cortes modernos para homens.",
-      id: "66bba5acddac395fde5fac32",
+      name: 'Lucas',
+      image: '/lucas.jpeg',
+      description: 'Especialista em cortes modernos para homens.',
+      id: '66bba5acddac395fde5fac32'
     },
     {
-      name: "Erik",
-      image: "/erik.jpeg",
-      description: "Barbeiro especializado em cuidados de barba.",
-      id: "66be2b08c411ad4269f08ed9",
-    },
-  ];
+      name: 'Erik',
+      image: '/erik.jpeg',
+      description: 'Barbeiro especializado em cuidados de barba.',
+      id: '66be2b08c411ad4269f08ed9'
+    }
+  ]
 
   function handleBarberSelect(barberId: string) {
-    setSelectedBarber(barberId === selectedBarber ? "" : barberId);
-    setSelectedTime("");
+    setSelectedBarber(barberId === selectedBarber ? '' : barberId)
+    setSelectedTime('')
   }
 
   function handleTimeSelect(time: string) {
-    setSelectedTime(time);
+    setSelectedTime(time)
   }
 
   function handleConfirm() {
     if (selectedBarber && selectedTime) {
       const queryParams = new URLSearchParams({
         barber: selectedBarber,
-        time: selectedTime,
-      }).toString();
-      router.push(`/pre-cadastro?${queryParams}`);
+        time: selectedTime
+      }).toString()
+      router.push(`/pre-cadastro?${queryParams}`)
     }
   }
 
   return (
     <div className="max-w-6xl mx-auto py-8">
-      <h2 className="text-3xl font-bold text-center mb-8">
-        Escolha seu barbeiro
-      </h2>
+      <h2 className="text-3xl font-bold text-center mb-8">Escolha seu barbeiro</h2>
       <div className="max-w-4xl mx-auto">
         <Carousel
           responsive={[
@@ -105,24 +104,24 @@ export default function Agendamento() {
               breakpoint: 768,
               settings: {
                 slidesToShow: 1,
-                slidesToScroll: 1,
-              },
+                slidesToScroll: 1
+              }
             },
             {
               breakpoint: 1000,
               settings: {
                 slidesToShow: 3,
-                slidesToScroll: 1,
-              },
-            },
+                slidesToScroll: 1
+              }
+            }
           ]}
         >
-          {barbers.map((barber) => (
+          {barbers.map(barber => (
             <div key={barber.id} className="flex w-fit flex-col items-center p-4">
               <div
                 className={cn(
-                  "relative w-64 h-64 rounded-lg overflow-hidden shadow-lg bg-white cursor-pointer",
-                  selectedBarber === barber.id && "border-4 border-blue-500"
+                  'relative w-64 h-64 rounded-lg overflow-hidden shadow-lg bg-white cursor-pointer',
+                  selectedBarber === barber.id && 'border-4 border-blue-500'
                 )}
                 onClick={() => handleBarberSelect(barber.id)}
               >
@@ -143,21 +142,19 @@ export default function Agendamento() {
       </div>
       {selectedBarber && (
         <div className="mt-8">
-          <h3 className="text-2xl font-bold text-center mb-4">
-            Selecione um horário
-          </h3>
+          <h3 className="text-2xl font-bold text-center mb-4">Selecione um horário</h3>
           {loading && <p className="text-center text-gray-500">Carregando...</p>}
           {error && <p className="text-center text-red-500">{error}</p>}
           <div className="flex flex-wrap justify-center space-y-2">
             {availableSlots.length > 0 ? (
-              availableSlots.map((slot) => (
+              availableSlots.map(slot => (
                 <button
                   key={slot._id}
                   className={cn(
-                    "p-2 border rounded-lg w-20 text-sm",
+                    'p-2 border rounded-lg w-20 text-sm',
                     selectedTime === slot.time
-                      ? "bg-blue-500 text-white" // Estilo para botão selecionado
-                      : "bg-white text-gray-700" // Estilo para botão não selecionado
+                      ? 'bg-blue-500 text-white' // Estilo para botão selecionado
+                      : 'bg-white text-gray-700' // Estilo para botão não selecionado
                   )}
                   onClick={() => handleTimeSelect(slot.time)}
                   disabled={slot.isBooked} // Desabilita botão se o horário estiver reservado
@@ -178,5 +175,5 @@ export default function Agendamento() {
         </div>
       )}
     </div>
-  );
+  )
 }
